@@ -11,6 +11,10 @@
 *.sln.docstates
 *.env
 
+signit/target/
+signit/upload-dir/
+.vscode/
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
