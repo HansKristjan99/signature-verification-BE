@@ -11,9 +11,6 @@
 *.sln.docstates
 *.env
 
-signit/target/*
-signit/target
-signit/upload-dir/
 .vscode/
 signit-backend/src/main/resources/application.properties
 signit-backend/target/
