@@ -11,9 +11,9 @@
 *.sln.docstates
 *.env
 
-signit/target/
-signit/upload-dir/
 .vscode/
+signit-backend/src/main/resources/application.properties
+signit-backend/target/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
