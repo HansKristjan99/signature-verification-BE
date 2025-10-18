@@ -1,4 +1,4 @@
-package com.example.signit;
+package com.vericode.signit;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
