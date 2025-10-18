@@ -13,8 +13,8 @@ import com.vericode.signit.storage.S3.S3Service;
 
 @SpringBootApplication()
 @EnableConfigurationProperties(StorageProperties.class)
-@EnableJpaRepositories(basePackages = {"com.example.data.File", "com.example.data.User"})
-@EntityScan(basePackages = {"com.example.data.File", "com.example.data.User"})
+@EnableJpaRepositories(basePackages = {"com.vericode.data.File", "com.vericode.data.User"})
+@EntityScan(basePackages = {"com.vericode.data.File", "com.vericode.data.User"})
 
 public class UploadingFilesApplication {
 
