@@ -10,7 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "file_info")
+@Table(name = "files")
 public class FileEntity {
   
   @Column(name = "file_name")
@@ -26,22 +26,26 @@ public class FileEntity {
   private LocalDate uploadTime;
 
   @Column(name = "path")
-  private String path; 
+  private String path;
+
+  @Column(name = "user_id")
+  private Integer userId;
   
   @Id
   @Column(name = "id")
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
   // Hibernate expects entities to have a no-arg constructor,
   // though it does not necessarily have to be public.
   private FileEntity() {}
   
-    public FileEntity(String fileName, String fileType, int size, String path) {
+    public FileEntity(String fileName, String fileType, int size, String path, Integer userId) {
         this.fileName = fileName;
         this.fileType = fileType;
         this.size = size;
         this.uploadTime = LocalDate.now();
         this.path = path;
+        this.userId = userId;
     }
     public String getFileName() {
         return fileName;

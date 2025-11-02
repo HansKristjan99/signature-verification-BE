@@ -1,7 +1,8 @@
-export const getUploadUrl = async (_token: string, filename: string) : Promise<string> => {
-    const url = `http://localhost:8080/files/newUploadURL/?filename=${filename}`
-    try{ 
-        const response = await fetch(url);
+import { apiClient } from '../api/client';
+
+export const getUploadUrl = async (filename: string) : Promise<string> => {
+    try{
+        const response = await apiClient.get(`/files/newUploadURL/?filename=${filename}`);
         const uploadUrl = await response.text();
         return uploadUrl;
     }

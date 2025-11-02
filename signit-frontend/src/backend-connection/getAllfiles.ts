@@ -1,7 +1,8 @@
-export const getAllFiles = async (_token: string) : Promise<string[]> => {
-    const url = "http://localhost:8080/files/"
-    try{ 
-        const response = await fetch(url);
+import { apiClient } from '../api/client';
+
+export const getAllFiles = async () : Promise<string[]> => {
+    try{
+        const response = await apiClient.get('/files/');
         console.log("Response status:", response.status);
 
         const fileNames = await response.json() as  string[];

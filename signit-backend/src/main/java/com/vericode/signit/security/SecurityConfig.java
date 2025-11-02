@@ -1,12 +1,17 @@
-package com.vericode.signit;
+package com.vericode.signit.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 public class SecurityConfig {
+
+    @Autowired
+    private SessionValidationFilter sessionValidationFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -14,7 +19,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(authz -> authz
                 .anyRequest().permitAll()
             )
-            .csrf().disable(); // Disable CSRF for testing
+            .csrf().disable() // Disable CSRF for testing
+            .addFilterBefore(sessionValidationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

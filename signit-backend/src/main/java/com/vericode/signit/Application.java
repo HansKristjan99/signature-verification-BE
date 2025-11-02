@@ -6,20 +6,23 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.vericode.signit.storage.StorageProperties;
 import com.vericode.signit.storage.S3.S3Service;
 
 @SpringBootApplication()
 @EnableConfigurationProperties(StorageProperties.class)
-@EnableJpaRepositories(basePackages = {"com.vericode.data.File", "com.vericode.data.User"})
-@EntityScan(basePackages = {"com.vericode.data.File", "com.vericode.data.User"})
-
-public class UploadingFilesApplication {
+@EnableJpaRepositories(basePackages = {"com.vericode.data.File", "com.vericode.data.User", "com.vericode.data.UserSession"})
+@EntityScan(basePackages = {"com.vericode.data.File", "com.vericode.data.User", "com.vericode.data.UserSession"})
+@ComponentScan(basePackages = {"com.vericode.signit", "com.vericode.services"})
+@EnableScheduling
+public class Application {
 
 	public static void main(String[] args) {
-		SpringApplication.run(UploadingFilesApplication.class, args);
+		SpringApplication.run(Application.class, args);
 	}
 
 	@Bean

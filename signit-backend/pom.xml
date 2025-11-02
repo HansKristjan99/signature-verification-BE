@@ -28,7 +28,7 @@
 	</scm>
 	<properties>
 		<java.version>24</java.version>
-		<start-class>com.vericode.signit.UploadingFilesApplication</start-class>
+		<start-class>com.vericode.signit.Application</start-class>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -86,7 +86,13 @@
 			<artifactId>s3</artifactId>
 			<version>2.29.0</version>
 		</dependency>
-	
+
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>sqs</artifactId>
+			<version>2.29.0</version>
+		</dependency>
+
 		<!-- Spring Boot Starter Web for RESTful APIs -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

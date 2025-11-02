@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { getUploadUrl } from "../backend-connection/getUploadUrl";
+import { apiClient } from "../api/client";
 import {
   Paper,
   Title,
@@ -29,7 +30,7 @@ function SingleFileUploader() {
 
     setUploading(true);
     try {
-      const uploadUrl = await getUploadUrl("token", file.name);
+      const uploadUrl = await getUploadUrl(file.name);
       await fetch(uploadUrl, {
         method: "PUT",
         body: file,
@@ -37,6 +38,7 @@ function SingleFileUploader() {
           "Content-Type": file.type || "application/octet-stream",
         },
       });
+
       setUploadSuccess(true);
       setTimeout(() => {
         setFile(null);

@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { getAllFiles } from './backend-connection/getAllfiles'
-import { createTheme, MantineProvider, AppShell, Container, Title, Button, Stack, Group, ActionIcon } from '@mantine/core';
+import { createTheme, MantineProvider, AppShell, Container, Title, Button, Stack, Group } from '@mantine/core';
 import FileTable from './components/FileTable';
 import SingleFileUploader from './components/SingleFileUploader';
 import LoginScreen from './components/LoginScreen';
-import {BrowserRouter, Routes, Route, Navigate } from "react-router";
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from "react-router";
+import { useAuth } from './hooks/useAuth';
 
 const theme = createTheme({
   primaryColor: 'blue',
@@ -35,15 +36,22 @@ function App() {
 function Main() {
   const [fileList, setfileList] = useState<string[] | null>(null);
   const [loading, setLoading] = useState(false);
+  const { logout } = useAuth();
+  const navigate = useNavigate();
 
   const handleGetFiles = async () => {
     setLoading(true);
     try {
-      const files = await getAllFiles("token");
+      const files = await getAllFiles();
       setfileList(files);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
   };
 
   return (
@@ -52,8 +60,11 @@ function Main() {
       padding="md"
     >
       <AppShell.Header>
-        <Container size="xl" h="100%" style={{ display: 'flex', alignItems: 'center' }}>
+        <Container size="xl" h="100%" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Title order={2}>SignIT - Digital Signature Verification</Title>
+          <Button variant="subtle" onClick={handleLogout}>
+            Logout
+          </Button>
         </Container>
       </AppShell.Header>
 
