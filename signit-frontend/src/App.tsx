@@ -1,11 +1,14 @@
 import { useState } from 'react'
 import { getAllFiles } from './backend-connection/getAllfiles'
+import { verifySignature } from './backend-connection/verifySignature'
 import { createTheme, MantineProvider, AppShell, Container, Title, Button, Stack, Group } from '@mantine/core';
 import FileTable from './components/FileTable';
 import SingleFileUploader from './components/SingleFileUploader';
+import SignaturesList from './components/SignaturesList';
 import LoginScreen from './components/LoginScreen';
 import { BrowserRouter, Routes, Route, Navigate, useNavigate } from "react-router";
 import { useAuth } from './hooks/useAuth';
+import type { VerifySignaturesResult } from './types/signature';
 
 const theme = createTheme({
   primaryColor: 'blue',
@@ -36,6 +39,8 @@ function App() {
 function Main() {
   const [fileList, setfileList] = useState<string[] | null>(null);
   const [loading, setLoading] = useState(false);
+  const [signatureData, setSignatureData] = useState<VerifySignaturesResult | null>(null);
+  const [verifyingFile, setVerifyingFile] = useState<string | null>(null);
   const { logout } = useAuth();
   const navigate = useNavigate();
 
@@ -46,6 +51,18 @@ function Main() {
       setfileList(files);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleVerifySignature = async (filename: string) => {
+    setVerifyingFile(filename);
+    try {
+      const result = await verifySignature(filename);
+      setSignatureData(result);
+    } catch (error) {
+      console.error('Error verifying signature:', error);
+    } finally {
+      setVerifyingFile(null);
     }
   };
 
@@ -84,8 +101,17 @@ function Main() {
                   Refresh Files
                 </Button>
               </Group>
-              <FileTable elements={fileList ? fileList : []} />
+              <FileTable
+                elements={fileList ? fileList : []}
+                onVerifySignature={handleVerifySignature}
+                verifyingFile={verifyingFile}
+              />
             </div>
+
+            <SignaturesList
+              signatureData={signatureData}
+              loading={verifyingFile !== null}
+            />
           </Stack>
         </Container>
       </AppShell.Main>

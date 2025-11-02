@@ -1,13 +1,22 @@
-import { Table, Paper, TextInput, Text, Badge, Group, ActionIcon, Tooltip, ScrollArea } from '@mantine/core';
+import { Table, Paper, TextInput, Text, Badge, Group, ActionIcon, Tooltip, ScrollArea, Loader } from '@mantine/core';
 import { useState, useMemo } from 'react';
-import { IconSearch, IconFile, IconDownload, IconTrash } from '@tabler/icons-react';
+import { IconSearch, IconFile, IconDownload, IconTrash, IconCertificate } from '@tabler/icons-react';
 
 export interface FileTableProps {
   elements: string[];
+  onVerifySignature?: (filename: string) => void;
+  verifyingFile?: string | null;
 }
 
-function FileTable({ elements }: FileTableProps) {
+function FileTable({ elements, onVerifySignature, verifyingFile }: FileTableProps) {
   const [search, setSearch] = useState('');
+
+  const VALID_SIGNATURE_EXTENSIONS = ['.asice', '.bdoc', '.ddoc', '.edoc'];
+
+  const isSignatureFile = (filename: string) => {
+    const lowerFilename = filename.toLowerCase();
+    return VALID_SIGNATURE_EXTENSIONS.some(ext => lowerFilename.endsWith(ext));
+  };
 
   const filteredElements = useMemo(() => {
     if (!search) return elements;
@@ -63,7 +72,7 @@ function FileTable({ elements }: FileTableProps) {
             <Table.Tr>
               <Table.Th>File Name</Table.Th>
               <Table.Th>Type</Table.Th>
-              <Table.Th style={{ width: 100 }}>Actions</Table.Th>
+              <Table.Th style={{ width: 150 }}>Actions</Table.Th>
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>
@@ -89,6 +98,22 @@ function FileTable({ elements }: FileTableProps) {
                   </Table.Td>
                   <Table.Td>
                     <Group gap="xs">
+                      {isSignatureFile(file) && onVerifySignature && (
+                        <Tooltip label="Verify Signatures">
+                          <ActionIcon
+                            variant="subtle"
+                            color="green"
+                            onClick={() => onVerifySignature(file)}
+                            loading={verifyingFile === file}
+                          >
+                            {verifyingFile === file ? (
+                              <Loader size={16} />
+                            ) : (
+                              <IconCertificate size={16} />
+                            )}
+                          </ActionIcon>
+                        </Tooltip>
+                      )}
                       <Tooltip label="Download">
                         <ActionIcon variant="subtle" color="blue">
                           <IconDownload size={16} />
