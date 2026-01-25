@@ -1,6 +1,7 @@
 package com.vericode.data.File;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,18 +29,18 @@ public class FileEntity {
   @Column(name = "path")
   private String path;
 
-  @Column(name = "user_id")
-  private Integer userId;
+  @Column(name = "user_id", columnDefinition = "UUID")
+  private UUID userId;
   
   @Id
-  @Column(name = "id")
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+  @Column(name = "id", columnDefinition = "UUID")
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private UUID id;
   // Hibernate expects entities to have a no-arg constructor,
   // though it does not necessarily have to be public.
   private FileEntity() {}
   
-    public FileEntity(String fileName, String fileType, int size, String path, Integer userId) {
+    public FileEntity(String fileName, String fileType, int size, String path, UUID userId) {
         this.fileName = fileName;
         this.fileType = fileType;
         this.size = size;
@@ -84,11 +85,19 @@ public class FileEntity {
         this.path = path;
     }
 
-    public Integer getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(UUID id) {
         this.id = id;
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
     }
 }

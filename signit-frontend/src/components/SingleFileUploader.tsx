@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { getUploadUrl } from "../backend-connection/getUploadUrl";
-import { apiClient } from "../api/client";
 import {
   Paper,
   Title,
@@ -10,7 +9,6 @@ import {
   Stack,
   FileButton,
   Badge,
-  Box,
   Progress,
 } from "@mantine/core";
 import { IconUpload, IconFile, IconCheck } from "@tabler/icons-react";

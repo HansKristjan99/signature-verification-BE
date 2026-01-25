@@ -15,8 +15,8 @@ import com.vericode.signit.storage.S3.S3Service;
 
 @SpringBootApplication()
 @EnableConfigurationProperties(StorageProperties.class)
-@EnableJpaRepositories(basePackages = {"com.vericode.data.File", "com.vericode.data.User", "com.vericode.data.UserSession"})
-@EntityScan(basePackages = {"com.vericode.data.File", "com.vericode.data.User", "com.vericode.data.UserSession"})
+@EnableJpaRepositories(basePackages = {"com.vericode.data.File", "com.vericode.data.User", "com.vericode.data.UserSession", "com.vericode.data.UploadSession"})
+@EntityScan(basePackages = {"com.vericode.data.File", "com.vericode.data.User", "com.vericode.data.UserSession", "com.vericode.data.UploadSession"})
 @ComponentScan(basePackages = {"com.vericode.signit", "com.vericode.services"})
 @EnableScheduling
 public class Application {

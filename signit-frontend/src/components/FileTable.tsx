@@ -1,14 +1,15 @@
 import { Table, Paper, TextInput, Text, Badge, Group, ActionIcon, Tooltip, ScrollArea, Loader } from '@mantine/core';
 import { useState, useMemo } from 'react';
-import { IconSearch, IconFile, IconDownload, IconTrash, IconCertificate } from '@tabler/icons-react';
+import { IconSearch, IconFile, IconDownload, IconTrash, IconCertificate, IconPencil } from '@tabler/icons-react';
 
 export interface FileTableProps {
   elements: string[];
   onVerifySignature?: (filename: string) => void;
   verifyingFile?: string | null;
+  onSignFile: (filename: string) => void;
 }
 
-function FileTable({ elements, onVerifySignature, verifyingFile }: FileTableProps) {
+function FileTable({ elements, onVerifySignature, verifyingFile, onSignFile }: FileTableProps) {
   const [search, setSearch] = useState('');
 
   const VALID_SIGNATURE_EXTENSIONS = ['.asice', '.bdoc', '.ddoc', '.edoc'];
@@ -122,6 +123,16 @@ function FileTable({ elements, onVerifySignature, verifyingFile }: FileTableProp
                       <Tooltip label="Delete">
                         <ActionIcon variant="subtle" color="red">
                           <IconTrash size={16} />
+                        </ActionIcon>
+                      </Tooltip>
+
+                      <Tooltip label="Sign">
+                        <ActionIcon 
+                          variant="subtle" 
+                          color="yellow"
+                          onClick={() => onSignFile(file)}
+                        >
+                          <IconPencil size={16} />
                         </ActionIcon>
                       </Tooltip>
                     </Group>

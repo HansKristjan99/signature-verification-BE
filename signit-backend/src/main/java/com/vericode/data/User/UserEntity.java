@@ -2,6 +2,7 @@ package com.vericode.data.User;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,9 +16,9 @@ import jakarta.persistence.Table;
 public class UserEntity {
 
     @Id
-    @Column(name = "user_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer userId;
+    @Column(name = "user_id", columnDefinition = "UUID")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID userId;
 
     @Column(name = "email")
     private String email;
@@ -42,11 +43,11 @@ public class UserEntity {
             this.lastLogin = null;
     }
 
-    public Integer getUserId() {
+    public UUID getUserId() {
             return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(UUID userId) {
             this.userId = userId;
     }
 

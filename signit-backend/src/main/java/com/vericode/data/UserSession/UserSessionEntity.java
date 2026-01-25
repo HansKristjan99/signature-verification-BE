@@ -26,7 +26,7 @@ public class UserSessionEntity {
     @Column(name = "session_token", nullable = false, unique = true, length = 64)
     private String sessionToken;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 

@@ -20,6 +20,8 @@ import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.http.SdkHttpMethod;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.DeleteObjectResponse;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import software.amazon.awssdk.services.s3.model.HeadObjectRequest;
@@ -207,5 +209,19 @@ public class S3Service implements StorageService {
 
         HeadObjectResponse headObjectResponse = s3Client.headObject(headObjectRequest);
         return headObjectResponse.contentLength();
+    }
+
+    /**
+     * Deletes a file from S3.
+     * Used to remove unauthorized uploads.
+     */
+    public DeleteObjectResponse deleteFile(String s3Key) {
+        DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+                .bucket(bucketName)
+                .key(s3Key)
+                .build();
+
+        DeleteObjectResponse response = s3Client.deleteObject(deleteObjectRequest);
+        return response;
     }
 }
