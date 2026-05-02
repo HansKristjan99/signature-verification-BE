@@ -9,7 +9,6 @@ import {
   Stack,
   FileButton,
   Badge,
-  Box,
   Progress,
 } from "@mantine/core";
 import { IconUpload, IconFile, IconCheck } from "@tabler/icons-react";
@@ -29,7 +28,7 @@ function SingleFileUploader() {
 
     setUploading(true);
     try {
-      const uploadUrl = await getUploadUrl("token", file.name);
+      const uploadUrl = await getUploadUrl(file.name);
       await fetch(uploadUrl, {
         method: "PUT",
         body: file,
@@ -37,6 +36,7 @@ function SingleFileUploader() {
           "Content-Type": file.type || "application/octet-stream",
         },
       });
+
       setUploadSuccess(true);
       setTimeout(() => {
         setFile(null);

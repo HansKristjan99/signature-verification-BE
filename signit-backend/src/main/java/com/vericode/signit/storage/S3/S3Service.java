@@ -13,16 +13,19 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.vericode.signit.AccessType;
-import com.vericode.signit.S3ObjectInputStreamWrapper;
 import com.vericode.signit.storage.StorageService;
+import com.vericode.signit.types.AccessType;
 
 import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.http.SdkHttpMethod;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.DeleteObjectResponse;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
+import software.amazon.awssdk.services.s3.model.HeadObjectRequest;
+import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectResponse;
@@ -186,5 +189,49 @@ public class S3Service implements StorageService {
         s3Client.listObjectsV2Paginator(b -> b.bucket(bucketName))
             .contents()
             .forEach(s3Object -> s3Client.deleteObject(builder -> builder.bucket(bucketName).key(s3Object.key())));
+    }
+
+    public String getContentType(String filename) {
+        HeadObjectRequest headObjectRequest = HeadObjectRequest.builder()
+                .bucket(bucketName)
+                .key(filename)
+                .build();
+
+        HeadObjectResponse headObjectResponse = s3Client.headObject(headObjectRequest);
+        return headObjectResponse.contentType();
+    }
+
+    public long getFileSize(String filename) {
+        HeadObjectRequest headObjectRequest = HeadObjectRequest.builder()
+                .bucket(bucketName)
+                .key(filename)
+                .build();
+
+        HeadObjectResponse headObjectResponse = s3Client.headObject(headObjectRequest);
+        return headObjectResponse.contentLength();
+    }
+
+    /**
+     * Uploads a file from a local Path to S3 with the given key.
+     */
+    public void uploadFile(Path filePath, String s3Key) {
+        s3Client.putObject(
+            PutObjectRequest.builder().bucket(bucketName).key(s3Key).build(),
+            RequestBody.fromFile(filePath)
+        );
+    }
+
+    /**
+     * Deletes a file from S3.
+     * Used to remove unauthorized uploads.
+     */
+    public DeleteObjectResponse deleteFile(String s3Key) {
+        DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+                .bucket(bucketName)
+                .key(s3Key)
+                .build();
+
+        DeleteObjectResponse response = s3Client.deleteObject(deleteObjectRequest);
+        return response;
     }
 }

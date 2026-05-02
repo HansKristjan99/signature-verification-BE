@@ -2,6 +2,7 @@ package com.vericode.data.User;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,25 +16,25 @@ import jakarta.persistence.Table;
 public class UserEntity {
 
     @Id
-    @Column(name = "userid")
+    @Column(name = "user_id", columnDefinition = "UUID")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer userid;
+    private UUID userId;
 
     @Column(name = "email")
     private String email;
-    
-    @Column(name = "datecreated")
+
+    @Column(name = "date_created")
     private LocalDate dateCreated;
 
-    @Column(name = "lastlogintimestamp")
-    private Timestamp lastLogin;  
+    @Column(name = "last_login_timestamp")
+    private Timestamp lastLogin;
 
     @Column(name = "password_hash")
     private String passwordHash;
 
     // Hibernate expects entities to have a no-arg constructor,
     // though it does not necessarily have to be public.
-    private UserEntity() {}
+    UserEntity() {}
 
     public UserEntity(String email, String passwordHash) {
             this.email = email;
@@ -42,12 +43,12 @@ public class UserEntity {
             this.lastLogin = null;
     }
 
-    public Integer getUserid() {
-            return userid;
+    public UUID getUserId() {
+            return userId;
     }
 
-    public void setUserid(Integer userid) {
-            this.userid = userid;
+    public void setUserId(UUID userId) {
+            this.userId = userId;
     }
 
     public String getEmail() {

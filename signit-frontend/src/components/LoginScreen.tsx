@@ -2,6 +2,7 @@ import { useNavigate } from "react-router";
 import { useState } from "react";
 import { registerUser } from "../backend-connection/registerUser";
 import { loginUser } from "../backend-connection/loginUser";
+import { useAuth } from "../hooks/useAuth";
 import {
   Container,
   Paper,
@@ -25,6 +26,7 @@ function LoginScreen() {
   const [registerLoading, setRegisterLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,10 +51,11 @@ function LoginScreen() {
     setError(null);
     setLoginLoading(true);
     try {
-      const result = await loginUser(username, password);
-      console.log("Login result:", result);
+      const token = await loginUser(username, password);
+      console.log("Login result:", token);
 
-      if (result) {
+      if (token) {
+        login(token);
         navigate("/main");
       } else {
         setError("Invalid username or password.");
