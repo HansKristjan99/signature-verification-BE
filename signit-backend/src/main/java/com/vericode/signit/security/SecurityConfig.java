@@ -40,7 +40,7 @@ public class SecurityConfig {
         
         // CHANGE THIS: You must list your exact frontend URL.
         // "*" is not allowed when allowCredentials is true.
-        configuration.setAllowedOrigins(List.of("http://localhost:5173", "https://your-production-domain.com"));
+        configuration.setAllowedOrigins(List.of("http://localhost:5173", "https://localhost:5173", "https://your-production-domain.com"));
         
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));

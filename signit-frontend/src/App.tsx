@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { getAllFiles } from './backend-connection/getAllfiles'
 import { verifySignature } from './backend-connection/verifySignature'
+import { signFile } from './backend-connection/sign_file'
 import { createTheme, MantineProvider, AppShell, Container, Title, Button, Stack, Group } from '@mantine/core';
 import FileTable from './components/FileTable';
 import SingleFileUploader from './components/SingleFileUploader';
@@ -41,6 +42,7 @@ function Main() {
   const [loading, setLoading] = useState(false);
   const [signatureData, setSignatureData] = useState<VerifySignaturesResult | null>(null);
   const [verifyingFile, setVerifyingFile] = useState<string | null>(null);
+  const [signingFile, setSigningFile] = useState<string | null>(null);
   const { logout } = useAuth();
   const navigate = useNavigate();
 
@@ -63,6 +65,18 @@ function Main() {
       console.error('Error verifying signature:', error);
     } finally {
       setVerifyingFile(null);
+    }
+  };
+
+  const handleSignFile = async (filename: string) => {
+    setSigningFile(filename);
+    try {
+      await signFile(filename);
+      await handleGetFiles();
+    } catch (error) {
+      console.error('Error signing file:', error);
+    } finally {
+      setSigningFile(null);
     }
   };
 
@@ -105,6 +119,8 @@ function Main() {
                 elements={fileList ? fileList : []}
                 onVerifySignature={handleVerifySignature}
                 verifyingFile={verifyingFile}
+                onSignFile={handleSignFile}
+                signingFile={signingFile}
               />
             </div>
 

@@ -212,6 +212,16 @@ public class S3Service implements StorageService {
     }
 
     /**
+     * Uploads a file from a local Path to S3 with the given key.
+     */
+    public void uploadFile(Path filePath, String s3Key) {
+        s3Client.putObject(
+            PutObjectRequest.builder().bucket(bucketName).key(s3Key).build(),
+            RequestBody.fromFile(filePath)
+        );
+    }
+
+    /**
      * Deletes a file from S3.
      * Used to remove unauthorized uploads.
      */

@@ -1,45 +1,28 @@
-import * as webeid from '@web-eid/web-eid-library';
+import * as webeid from '@web-eid/web-eid-library/dist/es/web-eid.js';
 import { apiClient } from '../api/client';
 // https://github.com/web-eid/web-eid.js
 
-async function signFile(file: string) {
-    try {
-            const {
-                certificate,
-                supportedSignatureAlgorithms
-            } = await webeid.getSigningCertificate({'lang': 'en'});
+export async function signFile(filename: string): Promise<void> {
+    const { certificate, supportedSignatureAlgorithms } = await webeid.getSigningCertificate({ lang: 'en' });
 
-            const prepareSigningResponse = await apiClient.post("/sign/prepare", 
-               JSON.stringify({certificate, supportedSignatureAlgorithms}),
-            );
-            if (!prepareSigningResponse.ok) {
-                throw new Error("POST /sign/prepare server error: " +
-                                prepareSigningResponse.status);
-            }
-            const {
-                hash,
-                hashFunction
-            } = await prepareSigningResponse.json();
+    const prepareRes = await apiClient.post("/signatures/prepare",
+        JSON.stringify({ filename, certificate, supportedSignatureAlgorithms }),
+    );
+    if (!prepareRes.ok) {
+        throw new Error("POST /signatures/prepare error: " + prepareRes.status);
+    }
 
-            const {
-                signature,
-                signatureAlgorithm
-            } = await webeid.sign(certificate, hash, hashFunction, {lang});
+    const { signingSessionId, hash, hashFunction } = await prepareRes.json();
 
-            const finalizeSigningResponse = await apiClient.post("/sign/finalize", 
-               JSON.stringify({signature, signatureAlgorithm}),
-            );
-            if (!finalizeSigningResponse.ok) {
-                throw new Error("POST /sign/finalize server error: " +
-                                finalizeSigningResponse.status);
-            }
-            const signResult = await finalizeSigningResponse.json();
+    const { signature, signatureAlgorithm } = await webeid.sign(certificate, hash, hashFunction, { lang: 'en' });
 
-            console.log("Signing successful! Response:", response);
-            // display successful signing message to user
+    const finalizeRes = await apiClient.post("/signatures/finalize",
+        JSON.stringify({ signingSessionId, signature, signatureAlgorithm }),
+    );
+    if (!finalizeRes.ok) {
+        throw new Error("POST /signatures/finalize error: " + finalizeRes.status);
+    }
 
-        } catch (error) {
-            console.log("Signing failed! Error:", error);
-            throw error;
-        }
+    const signResult = await finalizeRes.json();
+    console.log("Signing successful!", signResult);
 }

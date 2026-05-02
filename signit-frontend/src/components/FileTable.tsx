@@ -7,9 +7,10 @@ export interface FileTableProps {
   onVerifySignature?: (filename: string) => void;
   verifyingFile?: string | null;
   onSignFile: (filename: string) => void;
+  signingFile?: string | null;
 }
 
-function FileTable({ elements, onVerifySignature, verifyingFile, onSignFile }: FileTableProps) {
+function FileTable({ elements, onVerifySignature, verifyingFile, onSignFile, signingFile }: FileTableProps) {
   const [search, setSearch] = useState('');
 
   const VALID_SIGNATURE_EXTENSIONS = ['.asice', '.bdoc', '.ddoc', '.edoc'];
@@ -127,10 +128,11 @@ function FileTable({ elements, onVerifySignature, verifyingFile, onSignFile }: F
                       </Tooltip>
 
                       <Tooltip label="Sign">
-                        <ActionIcon 
-                          variant="subtle" 
+                        <ActionIcon
+                          variant="subtle"
                           color="yellow"
                           onClick={() => onSignFile(file)}
+                          loading={signingFile === file}
                         >
                           <IconPencil size={16} />
                         </ActionIcon>
